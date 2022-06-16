@@ -19,9 +19,9 @@ def format_duration(delta: timedelta) -> str:
 
 
 def storage_information_view(request):
-    non_closed_visits = []
-    visits_not_leaved = Visit.objects.filter(leaved_at=None)
-    for visit in visits_not_leaved:
+    unfinished_visits = Visit.objects.filter(leaved_at=None)
+    serialized_visits = []
+    for visit in unfinished_visits:
         visiter_name = visit.passcard.owner_name
         visit_entered_at = visit.entered_at
         duration = format_duration(get_duration(later=datetime.now(timezone.utc), earlier=localtime(visit_entered_at)))
@@ -30,9 +30,9 @@ def storage_information_view(request):
             'entered_at': visit_entered_at,
             'duration': duration,
         }
-        non_closed_visits.append(visit_info)
+        serialized_visits.append(visit_info)
 
     context = {
-        'non_closed_visits': non_closed_visits,  # не закрытые посещения
+        'non_closed_visits': serialized_visits,
     }
     return render(request, 'storage_information.html', context)

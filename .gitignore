@@ -267,3 +267,4 @@ cython_debug/
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/vcs.xml
 /.idea/django-orm-watching-storage.iml
+/.idea/.gitignore

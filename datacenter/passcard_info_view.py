@@ -18,9 +18,9 @@ def is_visit_longer_than(visit: Visit, minutes: int):
 
 def passcard_info_view(request, passcode):
     passcard = Passcard.objects.get(passcode=passcode)
-    visits_of_passcard = Visit.objects.filter(passcard=passcard)
-    this_passcard_visits = []
-    for visit in visits_of_passcard:
+    passcard_visits = Visit.objects.filter(passcard=passcard)
+    serialized_visits = []
+    for visit in passcard_visits:
         visit_entered_at = visit.entered_at
         duration, is_strange = is_visit_longer_than(visit=visit, minutes=60)
         visit_info = {
@@ -28,10 +28,10 @@ def passcard_info_view(request, passcode):
             'duration': duration,
             'is_strange': is_strange
         }
-        this_passcard_visits.append(visit_info)
+        serialized_visits.append(visit_info)
 
     context = {
         'passcard': passcard,
-        'this_passcard_visits': this_passcard_visits
+        'this_passcard_visits': serialized_visits
     }
     return render(request, 'passcard_info.html', context)
