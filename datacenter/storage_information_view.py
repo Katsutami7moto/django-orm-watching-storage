@@ -6,9 +6,11 @@ from django.utils.timezone import localtime
 from datacenter.models import Visit
 
 
-def get_duration(later: datetime, earlier: datetime):
-    if later and earlier:
-        return later - earlier
+def get_duration(visit: Visit) -> timedelta:
+    if visit.leaved_at:
+        return localtime(visit.leaved_at) - localtime(visit.entered_at)
+    else:
+        return datetime.now(timezone.utc) - localtime(visit.entered_at)
 
 
 def format_duration(delta: timedelta) -> str:
@@ -24,13 +26,13 @@ def storage_information_view(request):
     for visit in unfinished_visits:
         visiter_name = visit.passcard.owner_name
         visit_entered_at = visit.entered_at
-        duration = format_duration(get_duration(later=datetime.now(timezone.utc), earlier=localtime(visit_entered_at)))
-        visit_info = {
+        duration = format_duration(get_duration(visit))
+        serialized_visit = {
             'who_entered': visiter_name,
             'entered_at': visit_entered_at,
             'duration': duration,
         }
-        serialized_visits.append(visit_info)
+        serialized_visits.append(serialized_visit)
 
     context = {
         'non_closed_visits': serialized_visits,

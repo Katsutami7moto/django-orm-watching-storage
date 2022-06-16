@@ -9,7 +9,7 @@ from datacenter.storage_information_view import get_duration, format_duration
 
 
 def is_visit_longer_than(visit: Visit, minutes: int):
-    duration = get_duration(later=localtime(visit.leaved_at), earlier=localtime(visit.entered_at))
+    duration = get_duration(visit)
     if duration:
         duration_in_seconds = duration.total_seconds() // 60
         minutes_in_seconds = timedelta(minutes=minutes).total_seconds() // 60
@@ -23,12 +23,12 @@ def passcard_info_view(request, passcode):
     for visit in passcard_visits:
         visit_entered_at = visit.entered_at
         duration, is_strange = is_visit_longer_than(visit=visit, minutes=60)
-        visit_info = {
+        serialized_visit = {
             'entered_at': visit_entered_at,
             'duration': duration,
             'is_strange': is_strange
         }
-        serialized_visits.append(visit_info)
+        serialized_visits.append(serialized_visit)
 
     context = {
         'passcard': passcard,
