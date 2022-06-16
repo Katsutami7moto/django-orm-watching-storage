@@ -1,19 +1,6 @@
-from datetime import timedelta
-
 from django.shortcuts import render
-from django.utils.timezone import localtime
 
-from datacenter.models import Passcard
-from datacenter.models import Visit
-from datacenter.storage_information_view import get_duration, format_duration
-
-
-def is_visit_longer_than(visit: Visit, minutes: int):
-    duration = get_duration(visit)
-    if duration:
-        duration_in_seconds = duration.total_seconds() // 60
-        minutes_in_seconds = timedelta(minutes=minutes).total_seconds() // 60
-        return format_duration(duration), duration_in_seconds > minutes_in_seconds
+from datacenter.models import Visit, Passcard, is_visit_longer_than
 
 
 def passcard_info_view(request, passcode):
@@ -26,12 +13,12 @@ def passcard_info_view(request, passcode):
         serialized_visit = {
             'entered_at': visit_entered_at,
             'duration': duration,
-            'is_strange': is_strange
+            'is_strange': is_strange,
         }
         serialized_visits.append(serialized_visit)
 
     context = {
         'passcard': passcard,
-        'this_passcard_visits': serialized_visits
+        'this_passcard_visits': serialized_visits,
     }
     return render(request, 'passcard_info.html', context)
