@@ -262,3 +262,7 @@ cython_debug/
 
 # JetBrains
 /.idea/
+
+# Poetry
+/poetry.lock
+/pyproject.toml
