@@ -25,9 +25,11 @@ DJANGO_DB_USER='{db_user_name}'
 DJANGO_DB_PASSWORD='{db_user_password}'
 DJANGO_DB_SECRET_KEY='{db_secret_key}'
 DJANGO_DB_DEBUG=False
+DJANGO_DB_ALLOWED_HOSTS='127.0.0.1, 0.0.0.0, localhost'
 ```
 3. Replace all `{text}` parts with connection settings you have got from your system administrator.
 4. Set `DJANGO_DB_DEBUG=True` if you are developer or if you may need debugging information.
+5. Ensure the value of `DJANGO_DB_ALLOWED_HOSTS` with your system administrator.
 
 ### How to use
 
